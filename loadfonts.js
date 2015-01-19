@@ -124,7 +124,7 @@
 			if (fallbackClass) {
 				timerId = setTimeout(function fallback() {
 					html.className += " " + fallbackClass
-				}, fallbackTimeout || 777)
+				}, fallbackTimeout || 2222)
 			}
 			watchWidthChange(spans, 23, function () {
 				clearTimeout(timerId)
