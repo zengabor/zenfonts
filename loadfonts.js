@@ -1,5 +1,5 @@
 /*!
- * LoadFonts 1.1
+ * LoadFonts 1.2
  * https://github.com/GaborLenard/LoadFonts/
  *
  * Copyright 2015 Gabor Lenard
@@ -38,14 +38,10 @@
 
 }(window, function () {
 	"use strict"
-	
-	var testText = "// LoadFonts([{}]);" // used to measure the width
-	var testFonts = "Courier,Verdana" // these fonts are compared to the custom fonts
-	var spanFormat = "position:absolute;top:-999px;left:-999px;visibility:hidden;" +
-		"display:block;width:auto;height:auto;white-space:nowrap;line-height:normal;" +
-		"margin:0;padding:0;font-variant:normal;font-size:20em;font-family:" + testFonts + ";"
+
+	// these fonts are compared to the custom fonts:
+	var testFonts = "Courier,Verdana"
 	// These variables saves some bytes when minimizing:
-	var str = "string"
 	var doc = document
 	var html = doc.documentElement
 
@@ -59,42 +55,28 @@
 			element = 0
 		}
 	}
-	
+
 	// Check executed recursively to check the array of spans for width change.
 	// The array is handled as a single unit, all must be downloaded before it's done.
-	var watchWidthChange = function watchWidthChange(spans, fallbackStylesheet, delay, onAllFinished) {
+	var watchWidthChange = function watchWidthChange(spans, delay, onAllFinished) {
 		var giveup = delay > 12222 // the cumulated time will be around a minute
 		var i = spans.length
 		while (i--) {
 			var span = spans[i]
-			// we have to turn off the fallback stylesheet for the check
-			fallbackStylesheet.disabled = true
 			if (giveup || span.offsetWidth !== span.origWidth) {
 				spans.splice(i, 1)
 				kill(span)
 			}
-			// turn the stylesheet back on
-			fallbackStylesheet.disabled = false
 		}
 		if (spans.length === 0) {
 			if (!giveup) {
-				onAllFinished()				
+				onAllFinished()
 			}
 		} else {
-			setTimeout(function () { watchWidthChange(spans, fallbackStylesheet, delay * 1.3, onAllFinished) }, delay)
+			setTimeout(function () { 
+				watchWidthChange(spans, delay * 1.3, onAllFinished) 
+			}, delay)
 		}
-	}
-
-	// creates a new stylesheet that can be later appended to document.head
-	var createStylesheet = function createStylesheet(content) {
-		var s = doc.createElement("style")
-		s.setAttribute("type", "text/css") // IE compatibility
-		if (s.styleSheet) {
-			s.styleSheet.cssText = content
-		} else {
-			s.appendChild(doc.createTextNode(content))
-		}
-		return s
 	}
 
 	// a browser-agnostic way to remove class name from <html>
@@ -108,100 +90,79 @@
 
 	/**
 	 * Loads the specified fonts in a hidden span, forcing the browser to load them.
-	 * If the @param {fonts} is an Array, it either contains one or more strings or 
-	 * Objects or both, mixed. The Objects must have attribute `family` containing 
+	 * If the @param {fonts} is an Array, it either contains one or more strings or
+	 * Objects or both, mixed. The Objects must have attribute `family` containing
 	 * the font-family. Optional attribute is `style`.
 	 *
 	 * Examples: 
-	 *   loadFonts({family:"Sauna"})
-	 *   loadFonts({family:"Dolly", fallback:"Georgia"})
-	 *   loadFonts({family:"Dolly", fallback:["Georgia","Times"]})
-	 *   loadFonts({family: "Dolly", style: "font-weight: 300"}, 
-	 *     {loadingClass:"loading-dolly-r", fallbackClass:"fallback-dolly-r"})
-	 *   loadFonts([{family:"Auto"}, {family: "Sauna", style: "font-weight: 700"}], 
-	 *     {timeout:1000, fallbackClass:"fallback-webfonts"})
+	 *   loadFonts("Sauna Pro")
+	 *   loadFonts(["Sauna Pro", "Dolly Pro"])
+	 *   loadFonts({family:"Sauna", style: "font-style:italic; font-weight:700"},
+	 *     {timeout: 999, loadingClass:"sauna-load", fallbackClass:"sauna-fallb"})
 	 *   loadFonts(
-	 *     {family:"Fakir"}, 
-	 *     {timeout: 2500, onLoad: function(){ setLongCookie("fakir", "loaded") }
-	 *   })
+	 *     ["Fakir-Black", {family:"Fakir-Italic", style:"font-style:italic"}],
+	 *     {timeout: 2500, onLoad: function () { setLongCookie("fakir","loaded") }
+	 *   )
 	 *
-	 * @param {fonts} An object or an array of objects with font families, 
-	 *        optionally fallback local fonts, and optionally styles.
-	 * @param {options} An object with optional attributes: `timeout`, 
-	 *        `loadingClass`, `fallbackClass`, `onFallback`, `onLoad`.
+	 * @param {fonts} An object or an array of objects with font families,
+	 *        optionally styles (see examples above).
+	 * @param {options} An object with optional attributes: `timeout`,
+	 *        `loadingClass`, `fallbackClass`, and `onLoad`.
      *        If `loadingClass` is provided, it will be applied immediately and
 	 *        removed once the fallback happens or the loading finished.
 	 *        If `fallbackClass` is provided it will be applied to the <html>
 	 *        element after the specified timeout if loading isn't finished.
 	 *        The default for `timeout` is 2222 ms.
-	 *        If `onFallback` is provided it will be called upon fallback.
 	 *        If `onLoad` is provided it will be called when loading finished.
-	 * @param {successCallback} function that will be called backed after all fonts
-	 *        were loaded. Optional.
 	 */
 	var loadFonts = function loadFonts(fonts, options) {
 		if (!(fonts instanceof Array)) {
 			fonts = [fonts]
 		}
-		switch (typeof options) {
-			case "undefined": options = {}
-			case "object": break
-			case "number": options = {timeout: options}; break
-			// case str: options = {fallbackClass: options}; break
-			default: throw "options"
-		}
+		options = options || {}
 		var fallbackClass = options.fallbackClass || ""
 		var loadingClass = options.loadingClass || ""
-		var fallbackStylesheet
-		var spans = []
-		var fontfaceDefinitions = ""
 		var body = doc.body
 		if (!body) {
 			// cannot work without the document.body
 			throw "no body"
 		}
 		// create a separate span for each font
+		var spans = []
 		for (var i = 0, l = fonts.length; i < l; i++) {
 			var font = fonts[i]
+			if ("string" === typeof font) {
+				font = {family: font}
+			}
 			var family = font.family
 			var style = font.style
-			var localFallback = font.fallback
 			var span = doc.createElement("span")
-			span.style.cssText = spanFormat + (style ? style : "")
-			span.appendChild(doc.createTextNode(testText))
+			span.style.cssText = "position:absolute;top:-999px;left:-999px;visibility:hidden;" +
+				"display:block;width:auto;height:auto;white-space:nowrap;line-height:normal;" +
+				"margin:0;padding:0;font-variant:normal;font-size:20em;font-family:" + testFonts + ";" +
+				(style ? style : "")
+			span.appendChild(doc.createTextNode("// LoadFonts([{}]);"))
 			// put it into the body
 			body.appendChild(span)
 			// remember the size with the default test fonts
 			span.origWidth = span.offsetWidth
 			// change the font to the font family to be loaded
 			span.style.fontFamily = "'" + family + "'," + testFonts
-			// check whether the size changed, meaning the font is already ready
+			// check whether the size changed, meaning the font is already loaded
 			if (span.origWidth !== span.offsetWidth) {
-				// font was already loaded
+				// font is already loaded
 				kill(span)
 			} else {
-				// collect span
+				// collect spans for watching
 				spans.push(span)
-				// create 
-				if (localFallback) {
-					if (str === typeof localFallback) {
-						localFallback = [localFallback]
-					}
-					fontfaceDefinitions += "@font-face{font-family:'" + family + "';src:local('" + 
-						localFallback.join("'),local('") + "')" + (style ? style : "") + "}"
-				}
 			}
-		}
-		if (fontfaceDefinitions) {
-			fallbackStylesheet = createStylesheet(fontfaceDefinitions)
 		}
 		// success() will be executed after the font was loaded
 		var success = function success() {
+			// make sure the loading class is removed
+			removeTopLevelClass(loadingClass)
 			// the fallback class must be removed to reveal the font
 			removeTopLevelClass(fallbackClass)
-			removeTopLevelClass(loadingClass)
-			// remove extra stylesheet if any
-			kill(fallbackStylesheet)
 			// execute onLoad callback if provided
 			if (options.onLoad) {
 				options.onLoad()
@@ -217,28 +178,23 @@
 			}
 			// onAllFinished() will be called after all the fonts in these spans were loaded
 			var onAllFinished = success
-			if (fallbackClass || fallbackStylesheet) { // this CSS className needs to be applied after the timeout
+			if (fallbackClass) { // this CSS className needs to be applied after the timeout
 				var timeout = options.timeout || 2222
 				var fallbackTimerId = setTimeout(function fallback() {
-					// fall back routine
 					// replaces the loading class with the fallback class
 					removeTopLevelClass(loadingClass)
 					if (fallbackClass) {
 						html.className += " " + fallbackClass
 					}
-					if (fallbackStylesheet) {
-						// adds the fallback @font-face definitions to the document
-						doc.getElementsByTagName("head")[0].appendChild(fallbackStylesheet)
-					}
 				}, timeout)
 				// redefine onAllFinished to clear the timeout as well
 				onAllFinished = function () {
 					clearTimeout(fallbackTimerId) // no need for the fallback anymore
-					success() 
+					success()
 				}
 			}
 			// initiate backround watching
-			watchWidthChange(spans, fallbackStylesheet || {}, 23, onAllFinished)
+			watchWidthChange(spans, 23, onAllFinished)
 		}
 	}
 
