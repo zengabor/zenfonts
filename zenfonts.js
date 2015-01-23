@@ -1,6 +1,6 @@
 /*!
- * LoadFonts 1.2
- * https://github.com/GaborLenard/LoadFonts/
+ * Zenfonts 2.0
+ * https://github.com/GaborLenard/zenfonts/
  *
  * Copyright 2015 Gabor Lenard
  *
@@ -34,7 +34,7 @@
 /*jshint devel:true, asi:true */
 (function (root, definition) {
 
-	root.LoadFonts = definition()
+	root.Zenfonts = definition()
 
 }(window, function () {
 	"use strict"
@@ -56,25 +56,25 @@
 		}
 	}
 
-	// Check executed recursively to check the array of spans for width change.
+	// Check executed recursively to check the array of divs for width change.
 	// The array is handled as a single unit, all must be downloaded before it's done.
-	var watchWidthChange = function watchWidthChange(spans, delay, onAllFinished) {
+	var watchWidthChange = function watchWidthChange(divs, delay, onAllFinished) {
 		var giveup = delay > 12222 // the cumulated time will be around a minute
-		var i = spans.length
+		var i = divs.length
 		while (i--) {
-			var span = spans[i]
-			if (giveup || span.offsetWidth !== span.origWidth) {
-				spans.splice(i, 1)
-				kill(span)
+			var div = divs[i]
+			if (giveup || div.offsetWidth !== div.origWidth) {
+				divs.splice(i, 1)
+				kill(div)
 			}
 		}
-		if (spans.length === 0) {
+		if (divs.length === 0) {
 			if (!giveup) {
 				onAllFinished()
 			}
 		} else {
 			setTimeout(function () { 
-				watchWidthChange(spans, delay * 1.3, onAllFinished) 
+				watchWidthChange(divs, delay * 1.3, onAllFinished) 
 			}, delay)
 		}
 	}
@@ -89,19 +89,19 @@
 	}
 
 	/**
-	 * Loads the specified fonts in a hidden span, forcing the browser to load them.
-	 * If the @param {fonts} is an Array, it either contains one or more strings or
-	 * Objects or both, mixed. The Objects must have attribute `family` containing
-	 * the font-family. Optional attribute is `style`.
+	 * Loads the specified fonts in a hidden div, forcing the browser to load them.
+	 * If the @param {fonts} is an array, it either contains one or more strings or
+	 * objects or both, mixed. The objects can have the optional attribute `style`.
 	 *
 	 * Examples: 
-	 *   loadFonts("Sauna Pro")
-	 *   loadFonts(["Sauna Pro", "Dolly Pro"])
-	 *   loadFonts({family:"Sauna", style: "font-style:italic; font-weight:700"},
+	 *   Zenfonts("Sauna Pro")
+	 *   Zenfonts("Sauna Pro", {onLoad: handleLoadFinished})
+	 *   Zenfonts(["Sauna Pro", "Dolly Pro"])
+	 *   Zenfonts({family:"Sauna", style: "font-style:italic; font-weight:700"},
 	 *     {timeout: 999, loadingClass:"sauna-load", fallbackClass:"sauna-fallb"})
-	 *   loadFonts(
+	 *   Zenfonts(
 	 *     ["Fakir-Black", {family:"Fakir-Italic", style:"font-style:italic"}],
-	 *     {timeout: 2500, onLoad: function () { setLongCookie("fakir","loaded") }
+	 *     {timeout: 2500, onLoad: function () { setCookie("fakir","loaded") }
 	 *   )
 	 *
 	 * @param {fonts} An object or an array of objects with font families,
@@ -115,7 +115,7 @@
 	 *        The default for `timeout` is 2222 ms.
 	 *        If `onLoad` is provided it will be called when loading finished.
 	 */
-	var loadFonts = function loadFonts(fonts, options) {
+	var zenfonts = function zenfonts(fonts, options) {
 		if (!(fonts instanceof Array)) {
 			fonts = [fonts]
 		}
@@ -127,8 +127,8 @@
 			// cannot work without the document.body
 			throw "no body"
 		}
-		// create a separate span for each font
-		var spans = []
+		// create a separate div for each font
+		var divs = []
 		for (var i = 0, l = fonts.length; i < l; i++) {
 			var font = fonts[i]
 			if ("string" === typeof font) {
@@ -136,25 +136,25 @@
 			}
 			var family = font.family
 			var style = font.style
-			var span = doc.createElement("span")
-			span.style.cssText = "position:absolute;top:-999px;left:-999px;visibility:hidden;" +
+			var div = doc.createElement("div")
+			div.style.cssText = "position:absolute;top:-999px;left:-999px;visibility:hidden;" +
 				"display:block;width:auto;height:auto;white-space:nowrap;line-height:normal;" +
 				"margin:0;padding:0;font-variant:normal;font-size:20em;font-family:" + testFonts + ";" +
 				(style ? style : "")
-			span.appendChild(doc.createTextNode("// LoadFonts([{}]);"))
+			div.appendChild(doc.createTextNode("// Zenfonts([{}]);"))
 			// put it into the body
-			body.appendChild(span)
+			body.appendChild(div)
 			// remember the size with the default test fonts
-			span.origWidth = span.offsetWidth
+			div.origWidth = div.offsetWidth
 			// change the font to the font family to be loaded
-			span.style.fontFamily = "'" + family + "'," + testFonts
+			div.style.fontFamily = "'" + family + "'," + testFonts
 			// check whether the size changed, meaning the font is already loaded
-			if (span.origWidth !== span.offsetWidth) {
+			if (div.origWidth !== div.offsetWidth) {
 				// font is already loaded
-				kill(span)
+				kill(div)
 			} else {
-				// collect spans for watching
-				spans.push(span)
+				// collect divs for watching
+				divs.push(div)
 			}
 		}
 		// success() will be executed after the font was loaded
@@ -168,7 +168,7 @@
 				options.onLoad()
 			}
 		}
-		if (spans.length === 0) {
+		if (divs.length === 0) {
 			// no fonts need to be watched, everything is loaded already
 			success()
 		} else {
@@ -176,7 +176,7 @@
 			if (loadingClass) {
 				html.className += " " + loadingClass
 			}
-			// onAllFinished() will be called after all the fonts in these spans were loaded
+			// onAllFinished() will be called after all the fonts in these divs were loaded
 			var onAllFinished = success
 			if (fallbackClass) { // this CSS className needs to be applied after the timeout
 				var timeout = options.timeout || 2222
@@ -194,9 +194,9 @@
 				}
 			}
 			// initiate backround watching
-			watchWidthChange(spans, 23, onAllFinished)
+			watchWidthChange(divs, 23, onAllFinished)
 		}
 	}
 
-	return loadFonts
+	return zenfonts
 }))
