@@ -32,17 +32,12 @@
  */
 
 /*jshint devel:true, asi:true */
-(function (root, definition) {
-
-	root.Zenfonts = definition()
-
-}(window, function () {
+(function (win, doc) {
 	"use strict"
 
 	// these fonts are compared to the custom fonts:
 	var testFonts = "Courier,Verdana"
 	// These variables saves some bytes when minimizing:
-	var doc = document
 	var html = doc.documentElement
 
 	// Removes an element from its parent and releases it
@@ -52,14 +47,13 @@
 			if (p) {
 				p.removeChild(element)
 			}
-			element = 0
 		}
 	}
 
 	// Check executed recursively to check the array of divs for width change.
 	// The array is handled as a single unit, all must be downloaded before it's done.
 	var watchWidthChange = function watchWidthChange(divs, delay, onAllFinished) {
-		var giveup = delay > 12222 // the cumulated time will be around a minute
+		var giveup = delay > 9999 // the cumulated time will be less than a minute
 		var i = divs.length
 		while (i--) {
 			var div = divs[i]
@@ -115,18 +109,13 @@
 	 *        The default for `timeout` is 2222 ms.
 	 *        If `onLoad` is provided it will be called when loading finished.
 	 */
-	var zenfonts = function zenfonts(fonts, options) {
+	win.Zenfonts = function Zenfonts(fonts, options) {
 		if (!(fonts instanceof Array)) {
 			fonts = [fonts]
 		}
 		options = options || {}
-		var fallbackClass = options.fallbackClass || ""
-		var loadingClass = options.loadingClass || ""
-		var body = doc.body
-		if (!body) {
-			// cannot work without the document.body
-			throw "no body"
-		}
+		var loadingClass = options.loadingClass
+		var fallbackClass = options.fallbackClass
 		// create a separate div for each font
 		var divs = []
 		for (var i = 0, l = fonts.length; i < l; i++) {
@@ -143,7 +132,7 @@
 				(style ? style : "")
 			div.appendChild(doc.createTextNode("// Zenfonts([{}]);"))
 			// put it into the body
-			body.appendChild(div)
+			doc.body.appendChild(div)
 			// remember the size with the default test fonts
 			div.origWidth = div.offsetWidth
 			// change the font to the font family to be loaded
@@ -183,9 +172,7 @@
 				var fallbackTimerId = setTimeout(function fallback() {
 					// replaces the loading class with the fallback class
 					removeTopLevelClass(loadingClass)
-					if (fallbackClass) {
-						html.className += " " + fallbackClass
-					}
+					html.className += " " + fallbackClass
 				}, timeout)
 				// redefine onAllFinished to clear the timeout as well
 				onAllFinished = function () {
@@ -198,5 +185,4 @@
 		}
 	}
 
-	return zenfonts
-}))
+})(this, document)
