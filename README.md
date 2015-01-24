@@ -88,7 +88,7 @@ And in your CSS you may have something like:
 ```
 ...
 body { font-family: "Dolly", Georgia, serif; }
-.fallback-fakir body { font-family: Georgia, serif; }
+.fallback-dolly body { font-family: Georgia, serif; }
 ...
 ```
 
