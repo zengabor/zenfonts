@@ -4,11 +4,11 @@ A tiny JavaScript helper to load and pre-load web fonts that are specified via @
 
 - It's tiny (793 bytes minimized and gzipped), so it can be easily included in every page.
 - It can preload a font before it's used.
-- It can solve the “forever invisible text” issue (WebKit-based browsers on slow network) by applying a class during font loading.
+- It can solve the “invisible text” issue (WebKit-based browsers on slow network) by applying a class during font loading.
 - It can also solve the Flash Of Unformatted Text, aka [FOUT](http://www.paulirish.com/2009/fighting-the-font-face-fout/) (still happens in Internet Explorer).
 - Supports practically all browsers. Tested under the latest browser on Android, iOS, OS X, Windows, as well as under IE6+, Firefox 3.6+.
 
-Please note that Zenfonts isn't replacing the mechanic of loading web fonts. Instead, it is more like a safety valve as the majority of the browser population (Chrome desktop, Chrome for Android, Firefox, Opera) handles font-loading already quite smart, avoiding both FOUT and “forever invisible text”. Your fonts are also cached after the first load, and many times the network is fast enough. Zenfonts is there for you if everything fails: the fonts is not cahced, the network is very slow and the browser isn't handling it properly (most notably WebKit-based browsers, like iOS and older Android browsers. Zenfonts was made to make sure that even of those extreme cases are taken care, and you can have a peace of mind.
+Please note that Zenfonts isn't replacing the mechanic of loading web fonts. Instead, it is more like a safety valve as the majority of the browser population (Chrome desktop, Chrome for Android, Firefox, Opera) handles font-loading already quite smart, avoiding both FOUT and “invisible text”. Your fonts are also cached after the first load, and many times the network is fast enough. Zenfonts is there for you if everything fails: the fonts is not cahced, the network is very slow and the browser isn't handling it properly (most notably WebKit-based browsers, like iOS and older Android browsers. Zenfonts was made to make sure that even of those extreme cases are taken care, and you can have a peace of mind.
 
 
 ## Usage
@@ -75,7 +75,7 @@ Zenfonts("Fakir", {
 })
 ```
 
-### Example 2: Fixing “forever invisible text” (WebKit-based browsers)
+### Example 2: Fixing “invisible text” (WebKit-based browsers)
 
 Fixing invisible text requires preparation in the CSS as Zenfonts will apply a CSS class if the loading of the font is too slow.
 
