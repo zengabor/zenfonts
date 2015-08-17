@@ -13,12 +13,16 @@ Please note that Zenfonts isn't replacing the mechanic of loading web fonts. Ins
 
 ## Usage
 
-You can include the minimized version in the head. However, make sure you only call Zenfonts() once the body has been created. A good place is right after the `<body>` tag:
+You can include the minimized version in the head and call `Zenfonts` after that. Also you could bundle it with the other jsvascripts assets on your page:
 	
 ````
-<body>
+<head>
+    ...
+    
+    <script src="path/to/zenfonts.js"></script>
     <script>Zenfonts("Unibody", {fallbackClass: "fallback-unibody", timeout: 2500})</script>
-	...
+</head>
+    ...
 ````
 `Zenfonts()` returns immediately after calling but it stays in the background and periodically checks whether the fonts is loaded. Note that this background checking gets slower and slower with time and Zenfonts gives up after about a minute and removes itself entirely. So it won't slow down the page.
 

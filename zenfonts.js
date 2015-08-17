@@ -110,6 +110,12 @@
 	 *        If `onLoad` is provided it will be called when loading finished.
 	 */
 	win.Zenfonts = function Zenfonts(fonts, options) {
+		if (doc.body === null) {
+			setTimeout(function() {
+				Zenfonts(fonts, options);
+			}, 50);
+			return;
+		}
 		if (!(fonts instanceof Array)) {
 			fonts = [fonts]
 		}
