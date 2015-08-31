@@ -1,0 +1,18 @@
+{
+	"name": "zenfonts",
+	"version": "3.0.0",
+	"description": "A module to observe and control the loading of web fonts",
+	"main": "zenfonts.js",
+	"files": ["zenfonts.js", "zenfonts-min.js"],
+	"homepage": "https://zengabor.github.io/zenfonts/",
+	"keywords": ["font", "fonts", "webfont", "performance"],
+	"license": "Unlicense",
+	"author": "Gabor Lenard (http://www.gaborlenard.com)",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/zengabor/zenfonts.git"
+	},
+	"bugs": {
+		"url": "https://github.com/zengabor/zenfonts/issues"
+	}
+}

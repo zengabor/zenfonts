@@ -1,6 +1,6 @@
-/*!
- * Zenfonts 2.0
- * https://github.com/GaborLenard/zenfonts/
+/**
+ * Zenfonts 3.0.0
+ * https://github.com/zengabor/zenfonts/
  *
  * Copyright 2015 Gabor Lenard
  *
@@ -32,157 +32,165 @@
  */
 
 /*jshint devel:true, asi:true */
-(function (win, doc) {
+
+this.zenfonts = (function (doc) {
 	"use strict"
 
-	// these fonts are compared to the custom fonts:
-	var testFonts = "Courier,Verdana"
-	// These variables saves some bytes when minimizing:
-	var html = doc.documentElement
+	// The width of this font(s) is compared to the web fonts:
+	var testFonts = "serif"
+	var docElem = doc.documentElement
 
-	// Removes an element from its parent and releases it
-	var kill = function kill(element) {
-		if (element) {
-			var p = element.parentNode
-			if (p) {
-				p.removeChild(element)
+	var makeChecker = function makeChecker(div, origWidth) {
+		return function (forceRemove) {
+			if (forceRemove || div.offsetWidth !== origWidth) {
+				var p = div.parentNode
+				if (p) {
+					p.removeChild(div)
+				}
+				return true
 			}
 		}
 	}
 
-	// Check executed recursively to check the array of divs for width change.
-	// The array is handled as a single unit, all must be downloaded before it's done.
-	var watchWidthChange = function watchWidthChange(divs, delay, onAllFinished) {
-		var giveup = delay > 9999 // the cumulated time will be less than a minute
-		var i = divs.length
-		while (i--) {
-			var div = divs[i]
-			if (giveup || div.offsetWidth !== div.origWidth) {
-				divs.splice(i, 1)
-				kill(div)
-			}
-		}
-		if (divs.length === 0) {
-			if (!giveup) {
-				onAllFinished()
-			}
-		} else {
-			setTimeout(function () { 
-				watchWidthChange(divs, delay * 1.3, onAllFinished) 
-			}, delay)
-		}
-	}
-
-	// a browser-agnostic way to remove class name from <html>
-	var removeTopLevelClass = function addTopLevelClass(className) {
+	// A browser-agnostic way to remove a class name from the documentElement
+	var removeTopLevelClass = function removeTopLevelClass(className) {
 		if (className) {
-			html.className = html.className.replace(
+			docElem.className = docElem.className.replace(
 				new RegExp("(^|\\s)*" + className + "(\\s|$)*", "g"), " "
 			)
 		}
 	}
-
+	
 	/**
-	 * Loads the specified fonts in a hidden div, forcing the browser to load them.
+	 * Loads the specified fonts in hidden div elements, making the browser load them.
 	 * If the @param {fonts} is an array, it either contains one or more strings or
 	 * objects or both, mixed. The objects can have the optional attribute `style`.
 	 *
 	 * Examples: 
 	 *   Zenfonts("Sauna Pro")
-	 *   Zenfonts("Sauna Pro", {onLoad: handleLoadFinished})
+	 *   Zenfonts("Sauna Pro", {onSuccess: handleLoadFinished})
 	 *   Zenfonts(["Sauna Pro", "Dolly Pro"])
 	 *   Zenfonts({family:"Sauna", style: "font-style:italic; font-weight:700"},
-	 *     {timeout: 999, loadingClass:"sauna-load", fallbackClass:"sauna-fallb"})
+	 *     {fallback: 999, loadingClass:"sauna-load", fallbackClass:"sauna-fallb"})
 	 *   Zenfonts(
 	 *     ["Fakir-Black", {family:"Fakir-Italic", style:"font-style:italic"}],
-	 *     {timeout: 2500, onLoad: function () { setCookie("fakir","loaded") }
+	 *     {fallback: 2500, onSuccess: function () { setCookie("fakir","loaded") }
 	 *   )
 	 *
 	 * @param {fonts} An object or an array of objects with font families,
 	 *        optionally styles (see examples above).
-	 * @param {options} An object with optional attributes: `timeout`,
-	 *        `loadingClass`, `fallbackClass`, and `onLoad`.
-     *        If `loadingClass` is provided, it will be applied immediately and
+	 * @param {options} An object with the following optional attributes: 
+	 *        `loadingClass`, `fallbackClass`, `fallback`, `swap`,
+	 *        `onSuccess`, and `onSwap`.
+	 *        If `loadingClass` is provided it is applied immediately and
 	 *        removed once the fallback happens or the loading finished.
-	 *        If `fallbackClass` is provided it will be applied to the <html>
-	 *        element after the specified timeout if loading isn't finished.
-	 *        The default for `timeout` is 2222 ms.
-	 *        If `onLoad` is provided it will be called when loading finished.
+	 *        If `fallbackClass` is provided it is applied to the <html> element
+	 *        if loading wasn’t finished until the specified `fallback` timeout.
+	 *        (Note that `loadingClass` and `fallbackClass` each can be either a
+	 *        single class or a list of classes, space separated.)
+	 *        The default value for `fallback` is 2000 ms which is 2 seconds.
+	 *        `swap` is another timeout after the `fallbackClass` remains active;
+	 *        therefore `swap` must be equal to `fallback` or higher.
+	 *        The default value for `swap` is 9999 ms.
+	 *        If `onSuccess` is provided it is called when loading is finished.
+	 *        If `onSwap` is provided it is called when loading is given up.
 	 */
-	win.Zenfonts = function Zenfonts(fonts, options) {
+	return function zenfonts(fonts, options) {
 		if (!(fonts instanceof Array)) {
 			fonts = [fonts]
 		}
 		options = options || {}
-		var loadingClass = options.loadingClass
-		var fallbackClass = options.fallbackClass
-		// create a separate div for each font
-		var divs = []
-		for (var i = 0, l = fonts.length; i < l; i++) {
+		if (!doc.body) {
+			return setTimeout(function () { zenfonts(fonts, options) }, 1)
+		}
+		// Create a separate div for each font:
+		var checkers = []
+		var i = fonts.length
+		while (i--) {
 			var font = fonts[i]
-			if ("string" === typeof font) {
+			if (typeof font === "string") {
 				font = {family: font}
 			}
 			var family = font.family
-			var style = font.style
 			var div = doc.createElement("div")
-			div.style.cssText = "position:absolute;top:-999px;left:-999px;visibility:hidden;" +
-				"display:block;width:auto;height:auto;white-space:nowrap;line-height:normal;" +
-				"margin:0;padding:0;font-variant:normal;font-size:20em;font-family:" + testFonts + ";" +
-				(style ? style : "")
+			div.style.cssText = "position:absolute;top:-999px;left:-9999px;visibility:hidden;" +
+				"white-space:nowrap;font-size:20em;font-family:" + testFonts + ";" + font.style || ""
 			div.appendChild(doc.createTextNode("// Zenfonts([{}]);"))
-			// put it into the body
 			doc.body.appendChild(div)
-			// remember the size with the default test fonts
-			div.origWidth = div.offsetWidth
-			// change the font to the font family to be loaded
+			var checker = makeChecker(div, div.offsetWidth)
+			// Change the font to the font family to be loaded:
 			div.style.fontFamily = "'" + family + "'," + testFonts
-			// check whether the size changed, meaning the font is already loaded
-			if (div.origWidth !== div.offsetWidth) {
-				// font is already loaded
-				kill(div)
-			} else {
-				// collect divs for watching
-				divs.push(div)
+			// If the size hasn’t changed already, add it to the list of checkers:
+			if (!checker()) {
+				checkers.push(checker)
 			}
 		}
-		// success() will be executed after the font was loaded
+		var fallbackClass = options.fallbackClass
+		// onSuccess will be executed after all fonts was loaded
 		var success = function success() {
-			// make sure the loading class is removed
-			removeTopLevelClass(loadingClass)
-			// the fallback class must be removed to reveal the font
+			// The fallback class must be removed to reveal the web font:
 			removeTopLevelClass(fallbackClass)
-			// execute onLoad callback if provided
-			if (options.onLoad) {
-				options.onLoad()
+			// Execute the onLoad callback if provided:
+			if (options.onSuccess) {
+				options.onSuccess()
 			}
 		}
-		if (divs.length === 0) {
-			// no fonts need to be watched, everything is loaded already
-			success()
-		} else {
-			// put up loading class if there is any
-			if (loadingClass) {
-				html.className += " " + loadingClass
+		if (checkers.length === 0) {
+			// All fonts are already loaded. Zenfonts quits.
+			return success()
+		}
+		// Apply loading class if there is any:
+		var loadingClass = options.loadingClass
+		if (loadingClass) {
+			docElem.className += " " + loadingClass
+		}
+		var fallbackTimeout = options.fallback || 2000
+		// success() will be called after all the fonts were loaded
+		if (fallbackClass) { // this is applied after the fallback timeout
+			var fallbackTimerId = setTimeout(function fallback() {
+				removeTopLevelClass(loadingClass)
+				docElem.className += " " + fallbackClass
+			}, fallbackTimeout)
+			// Redefine success to clear the fallback timeout as well:
+			var origSuccess = success
+			success = function () {
+				clearTimeout(fallbackTimerId) // no need for the fallback anymore
+				origSuccess()
 			}
-			// onAllFinished() will be called after all the fonts in these divs were loaded
-			var onAllFinished = success
-			if (fallbackClass) { // this CSS className needs to be applied after the timeout
-				var timeout = options.timeout || 2222
-				var fallbackTimerId = setTimeout(function fallback() {
-					// replaces the loading class with the fallback class
-					removeTopLevelClass(loadingClass)
-					html.className += " " + fallbackClass
-				}, timeout)
-				// redefine onAllFinished to clear the timeout as well
-				onAllFinished = function () {
-					clearTimeout(fallbackTimerId) // no need for the fallback anymore
-					success()
+		}
+
+		var giveUpAfter = new Date().getTime() + Math.max(fallbackTimeout, options.swap || 9999);
+
+		// Initiate recursive backround check on the array of checkers for width change.
+		// The array is handled as a single unit, all must be loaded before it's done.
+		// success() is only called if all the fonts were loaded successfully.
+		// onSwap() is called when Zenfonts gives up.
+		// removeLoadingClass() is called in any case, either after success or after Zenfonts gives up.
+		(function monitorWidth(delay) {
+			setTimeout(function () {
+				var giveUp = new Date().getTime() >= giveUpAfter
+				if (giveUp && options.onSwap) {
+					options.onSwap()
 				}
-			}
-			// initiate backround watching
-			watchWidthChange(divs, 23, onAllFinished)
-		}
+				var i = checkers.length
+				while (i--) {
+					if (checkers[i](giveUp)) {
+						checkers.splice(i, 1)
+					}
+				}
+				if (checkers.length === 0) {
+					if (!giveUp) {
+						success()
+					}
+					removeTopLevelClass(loadingClass)
+				} else {
+					monitorWidth(delay * 1.5)
+				}
+			}, delay)
+		})(9)
+
 	}
 
-})(this, document)
+})(document);
+
+
