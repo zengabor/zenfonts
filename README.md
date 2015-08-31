@@ -80,7 +80,7 @@ The two parameters detailed:
 - `loadingClass` is applied during loading (before success / fallback / swap).
 - `fallbackClass` is applied only if the `fallback` timeout value is reached before all fonts were loaded. 
 - `fallback` defines the time before the `fallbackClass` is applied (default is `2000`).
-- `swap` is final timeout after the font loading is given up (default is `9999`); it must be equal to `timeout` or higher.
+- `swap` is final timeout after the font loading is given up (default is `9999`); it must be equal to `fallback` or higher.
 - `onSuccess` is a callback function that is executed once all specified `fonts` were successfully loaded.
 - `onSwap` is a callback function that is executed if at least one of the `fonts` could not be  loaded.
 
