@@ -126,7 +126,7 @@ this.zenfonts = (function (doc) {
 			}
 		}
 		var fallbackClass = options.fallbackClass
-		// onSuccess will be executed after all fonts was loaded
+		// success() will be executed after all fonts was loaded
 		var success = function success() {
 			// The fallback class must be removed to reveal the web font:
 			removeTopLevelClass(fallbackClass)
@@ -145,7 +145,6 @@ this.zenfonts = (function (doc) {
 			docElem.className += " " + loadingClass
 		}
 		var fallbackTimeout = options.fallback || 2000
-		// success() will be called after all the fonts were loaded
 		if (fallbackClass) { // this is applied after the fallback timeout
 			var fallbackTimerId = setTimeout(function fallback() {
 				removeTopLevelClass(loadingClass)
