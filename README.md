@@ -5,7 +5,7 @@
 </p>
 
 
-#### [**Demo**](https://zengabor.github.io/zenfonts/) &nbsp; &nbsp; &nbsp; &nbsp; [**Download**](https://github.com/zengabor/zenfonts/archive/latest.zip) &nbsp; &nbsp; &nbsp; &nbsp; [**About**](#about) &nbsp; &nbsp; &nbsp; &nbsp; [**Install**](#install) &nbsp; &nbsp; &nbsp; &nbsp; [**How it works**](#how-it-works) &nbsp; &nbsp; &nbsp; &nbsp; [**Examples**](#examples) &nbsp; &nbsp; &nbsp; &nbsp; [**License**](#license)
+#### [**Demo**](https://zengabor.github.io/zenfonts/) &nbsp; &nbsp;  [**Download**](https://github.com/zengabor/zenfonts/archive/latest.zip) &nbsp; &nbsp; [**About**](#about) &nbsp; &nbsp; [**Install**](#install) &nbsp; &nbsp; [**How it works**](#how-it-works) &nbsp; &nbsp; [**Examples**](#examples) &nbsp; &nbsp; [**License**](#license)
 
 
 # Web Fonts Are Beautiful. Once&nbsp;They&nbsp;Are&nbsp;Loaded.
