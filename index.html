@@ -1,1 +1,408 @@
-Zenfonts
+<!doctype html>
+
+<!-- Description and demo for https://github.com/zengabor/zenscroll -->
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Zenfonts - Webfonts</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="twitter:site" content="@zengabor">
+	<meta name="twitter:creator" content="@zengabor">
+	<meta name="twitter:card" content="summary">
+	<meta property="og:url" content="http://zengabor.github.io/zenfonts/">
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="Zenfonts">
+	<meta property="og:title" content="Zenfonts">
+	<link rel="author" href="http://www.gaborlenard.com/">
+	<meta name="theme-color" content="#eee9e3">
+	<link rel="icon" sizes="16x16" href="zen-16.png" type="image/png">
+	<link rel="icon" sizes="192x192" href="zen-192.png" type="image/png">
+	<link rel="icon" sizes="32x32" href="zen-32.png" type="image/png">
+	<!--[if lt IE 9]>
+		<script>"header main footer nav section figure figcaption time".replace(/\w+/g,function(n){document.createElement(n)})</script>
+	<![endif]-->
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<!--[if lt IE 9]>
+		<link rel="stylesheet" type="text/css" href="ie.css">
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<![endif]-->
+
+
+	<link href="https://fonts.googleapis.com/css?family=Merienda+One" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Alegreya+Sans:400,400italic,700,700italic" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet" type="text/css">
+
+
+	<style>
+		/* HIDES CONTENT DURING LOAD TO FIX FOUT ON IE: */
+		.loading body {
+			visibility: hidden;
+		}
+
+
+		/* FONT AND FALLBACK FOR BODY TEXT: */
+		body, .play-button {
+			font-family: "Alegreya Sans", sans-serif;
+		}
+		nav a, h2, h3, strong, .play-button {
+			font-weight: 700;
+		}
+		h3 {
+			font-style: italic;
+		}
+		.fallback body {
+			font-family: "Avenir Next", Avenir, "Segoe UI", Calibri, "Helvetica Neue", Helvetica, sans-serif;
+		}
+		.fallback h2, .fallback strong {
+			font-weight: bold;
+		}
+
+
+		/* FONT AND FALLBACK FOR THE LOGOTYPE: */
+		.logotype h1 {
+			font-family: "Merienda One", serif;
+			font-weight: normal;
+		}
+		.fallback-logotype .logotype h1 {
+			font-family: "Iowan Old Style", "Hoefler Text", Literata, "Droid Serif", serif;
+			font-style: italic;
+		}
+
+
+		/* FONT AND FALLBACK FOR THE CODE SNIPPETS: */
+		code {
+			font-family: "PT Mono", monospace;
+		}
+		.fallback-mono code {
+			font-family: monospace;
+		}
+z{}</style>
+
+
+	<script>this.zenfonts=function(e){"use strict";var t="serif",n=e.documentElement,a=function s(e,t){return function(n){if(n||e.offsetWidth!==t){var a=e.parentNode;return a&&a.removeChild(e),!0}}},i=function o(e){e&&(n.className=n.className.replace(new RegExp("(^|\\s)*"+e+"(\\s|$)*","g")," "))};return function r(s,o){if(s instanceof Array||(s=[s]),o=o||{},!e.body)return setTimeout(function(){r(s,o)},1);for(var f=[],l=s.length;l--;){var c=s[l];"string"==typeof c&&(c={family:c});var u=c.family,m=e.createElement("div");m.style.cssText="position:absolute;top:-999px;left:-9999px;visibility:hidden;white-space:nowrap;font-size:20em;font-family:"+t+";"+c.style||"",m.appendChild(e.createTextNode("// Zenfonts([{}]);")),e.body.appendChild(m);var p=a(m,m.offsetWidth);m.style.fontFamily="'"+u+"',"+t,p()||f.push(p)}var d=o.fallbackClass,v=function b(){i(d),o.onSuccess&&o.onSuccess()};if(0===f.length)return v();var h=o.loadingClass;h&&(n.className+=" "+h);var y=o.fallback||2e3;if(d){var g=setTimeout(function x(){i(h),n.className+=" "+d},y),w=v;v=function(){clearTimeout(g),w()}}var T=(new Date).getTime()+Math.max(y,o.swap||9999);!function N(e){setTimeout(function(){var t=(new Date).getTime()>=T;t&&o.onSwap&&o.onSwap();for(var n=f.length;n--;)f[n](t)&&f.splice(n,1);0===f.length?(t||v(),i(h)):N(1.5*e)},e)}(9)}}(document);</script>
+
+
+	<script>/*jshint devel:true, asi:true */ /*global zenfonts */
+
+
+		// 1. FONT FOR BODY TEXT, NORMAL AND BOLD (CRITICAL)
+		// Important to make the page readable as soon as possible.
+		// Therefore it falls back to a local font after 1 second and remains so (swap).
+
+		zenfonts([
+			"Alegreya Sans", 
+			{family: "Alegreya Sans", style: "font-weight: 400; font-style: italic"},
+			{family: "Alegreya Sans", style: "font-weight: 700"},
+			{family: "Alegreya Sans", style: "font-weight: 700; font-style: italic"}
+		], { 
+			loadingClass: "loading", 
+			fallbackClass: "fallback", 
+			fallback: 1000, 
+			swap: 1000
+		})
+
+
+		// 2. FONT FOR THE MAIN TITLE
+		// Using default fallback timeout (2s) and swap (10s) values
+		// as there is no harm done if this reflows and it is nice to be loaded.
+		// It keeps loading for another 30 seconds if it wasn’t loaded for the first time.
+
+		zenfonts("Merienda One", { 
+			fallbackClass: "fallback-logotype", 
+			onSwap: function () { 
+				zenfonts("Merienda One", { fallback: 30000 })
+			}
+		})
+
+
+		// 3. FONT FOR CODE SNIPPETS
+		// It falls back to a local font after 1 second, 
+		// but still tries to load the web font within 10 seconds as reflow is not a big issue.
+
+		zenfonts("PT Mono", { fallbackClass: "fallback-mono", fallback: 1000 } )
+
+</script>
+
+
+	<script>zenfonts("Nincs ilyen")</script>
+
+
+	<script async src="https://www.google-analytics.com/analytics.js"></script>
+	<script>
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)}
+	ga.l=+new Date
+	ga('create', 'UA-66867856-3', 'auto')
+	ga('send', 'pageview')
+	</script>
+</head>
+
+
+<body>
+	
+	<header>
+		<a class="logotype" href="https://github.com/zengabor/zenfonts">
+			<h1>Zenfonts</h1>
+			github.com/zengabor/zenfonts
+		</a>
+		<nav>
+			<a href="#about">About</a>
+			<a href="#install">Install</a>
+			<a href="#howitworks">How it works</a>
+			<a href="#examples">Examples</a>
+			<a href="#license">License</a>
+		</nav>
+	</header>
+	
+	<main id="main">
+
+		<section class="hero">
+
+			<h1 id="webfontsarebeautiful.oncenbsptheynbsparenbsploaded.">Web Fonts Are Beautiful. Once&nbsp;They&nbsp;Are&nbsp;Loaded.</h1>
+
+<p>Isn’t it frustrating when text is already there, yet you cannot read it because the fonts are not loaded yet? And when Internet Explorer flickers the text? How&nbsp;unprofessional!</p>
+
+<p>Take control over font loading. Just the way you want. Zenfonts&nbsp;can&nbsp;help.</p>
+
+<p><em>759&nbsp;bytes of vanilla JavaScript. Works everywhere.</em></p>
+
+			<a class="hero-button" href="https://github.com/zengabor/zenfonts">View Zenfonts on GitHub</a>
+
+		</section>
+
+
+
+<h2 id="about">About</h2>
+
+<p>Zenfonts is a tiny JavaScript helper to (pre)load web fonts. It’s not replacing the way of loading web fonts. Rather, Zenfonts is there to help you when the fonts are not loaded in time.</p>
+
+<p>If you are really serious about performance &amp; a smooth experience consider not using web fonts at all. Most platforms have a handful of beautiful fonts already installed which don’t have any of the drawbacks of web fonts. However, if you decide to use web fonts then Zenfonts can be a big help for you:</p>
+
+<ul>
+<li>It can solve the “long invisible text” issue (iPhone and old WebKit-based Android browsers on slow network) by applying a fallback class during font loading.</li>
+<li>It can also solve the Flash Of Unformatted Text, aka <a href="http://www.paulirish.com/2009/fighting-the-font-face-fout/">FOUT</a> which still happens in Internet Explorer.</li>
+<li>It can preload fonts before they are used (e.g., in a dialog box or on a next page).</li>
+<li>Supports practically all browsers. Tested and works under Android 2.2+ browser, Chrome 14+, Edge, Firefox 3.6+, IE6+, Opera 10.6+, Safari 4.1+ for iOS &amp; OS X.</li>
+<li>It’s tiny (759 bytes minimized &amp; gzipped), ready to be inlined in your page.</li>
+</ul>
+
+<p>Of course, loading web fonts is not a problem in most cases. The network is fast enough, the font files are cached after the first load, and the majority of the browser population (Chrome desktop, Chrome for Android, Firefox, Opera) handles font-loading already quite smart, avoiding both the initial flickering and reflow and the “long invisible text” problem by falling back to the next available font after 3&nbsp;seconds. Other browsers, on the other hand, most prominently iPhones, iPads and old Android browsers hide the text too long if the loading process is slow. Think of Zenfonts as a safety valve. It saves your site if everything else fails.</p>
+
+<p>In the long run Zenfonts will be obsolete once the wonderful <a href="https://github.com/KenjiBaheux/css-font-rendering/">css-font-rendering</a> becomes available in the majority of the browser population. At the moment there isn’t a single browser supporting it, so Zenfonts may be quite useful.</p>
+
+<h2 id="install">Install</h2>
+
+<p>Since web fonts are already in the critical path, you don’t want zenfonts to be another blocking request. Instead, inline the minimized version into the page (you can automate this with <a href="https://incident57.com/codekit/">CodeKit</a>, <a href="https://gruntjs.com/">grunt</a>, etc.). The best place is before the <code>&lt;/head&gt;</code> closing tag. Then call it as many times as required, with the desired fonts and parameters. For example:</p>
+
+<pre><code class="html">...
+    &lt;script&gt;this.zenfonts=function(e){&quot;use strict&quot;;var t=&quot;serif&quot;,n=e.documentElement,a=function s(e,t){return function(n){if(n||e.offsetWidth!==t){var a=e.parentNode;return a&amp;&amp;a.removeChild(e),!0}}},i=function o(e){e&amp;&amp;(n.className=n.className.replace(new RegExp(&quot;(^|\\s)*&quot;+e+&quot;(\\s|$)*&quot;,&quot;g&quot;),&quot; &quot;))};return function r(s,o){if(s instanceof Array||(s=[s]),o=o||{},!e.body)return setTimeout(function(){r(s,o)},1);for(var f=[],l=s.length;l--;){var c=s[l];&quot;string&quot;==typeof c&amp;&amp;(c={family:c});var u=c.family,m=e.createElement(&quot;div&quot;);m.style.cssText=&quot;position:absolute;top:-999px;left:-9999px;visibility:hidden;white-space:nowrap;font-size:20em;font-family:&quot;+t+&quot;;&quot;+c.style||&quot;&quot;,m.appendChild(e.createTextNode(&quot;// Zenfonts([{}]);&quot;)),e.body.appendChild(m);var p=a(m,m.offsetWidth);m.style.fontFamily=&quot;'&quot;+u+&quot;',&quot;+t,p()||f.push(p)}var d=o.fallbackClass,v=function b(){i(d),o.onSuccess&amp;&amp;o.onSuccess()};if(0===f.length)return v();var h=o.loadingClass;h&amp;&amp;(n.className+=&quot; &quot;+h);var y=o.fallback||2e3;if(d){var g=setTimeout(function x(){i(h),n.className+=&quot; &quot;+d},y),w=v;v=function(){clearTimeout(g),w()}}var T=(new Date).getTime()+Math.max(y,o.swap||9999);!function N(e){setTimeout(function(){var t=(new Date).getTime()&gt;=T;t&amp;&amp;o.onSwap&amp;&amp;o.onSwap();for(var n=f.length;n--;)f[n](t)&amp;&amp;f.splice(n,1);0===f.length?(t||v(),i(h)):N(1.5*e)},e)}(9)}}(document);&lt;/script&gt;
+    &lt;script&gt;
+        zenfonts(&quot;Beautiful Font&quot;, {fallbackClass: &quot;fallback-1&quot;, fallback: 1000, swap: 1000})
+        zenfonts([&quot;Font2&quot;, &quot;Font3&quot;], {loadingClass: &quot;load&quot;, fallbackClass: &quot;fallback-2&quot;})
+    &lt;/script&gt;
+&lt;/head&gt;
+</code></pre>
+
+<p><em>Tip:</em> You can actually copy and use the above code to install Zenfonts. The first <code>&lt;script&gt;</code> line contains the current version of Zenfonts. Just make sure you copy the entire line.</p>
+
+<p>You can also <a href="https://github.com/zengabor/zenfonts/archive/latest.zip">download Zenfonts</a>, or use npm:</p>
+
+<pre><code>npm install zenfonts
+</code></pre>
+
+<p>Of course, your web fonts must be already specified by <code>@font-face</code> or must be loaded in some other way (like by a JavaScript font loader). It doesn’t matter how; for Zenfonts it’s all transparent.</p>
+
+<h2 id="howitworks">How it works</h2>
+
+<p><em>Tip:</em> Feel free to skip this dry theory section &amp; go straight to <a href="#examples">Examples</a>.</p>
+
+<p><code>zenfonts(fonts, options)</code> returns immediately after calling but it stays in the background and periodically checks whether the specified fonts are loaded. Zenfonts acts only when the four basic events occur (see below), performing what you specified. (Note that this background checking gets less and less frequent with time. Finally, by default after 10 seconds, Zenfonts gives up and removes itself completely.)</p>
+
+<p><em>Important:</em> The font-families you reference in the <code>fonts</code> parameter must be already specified, typically in your CSS as <code>@font-face</code> declarations.</p>
+
+<p>The two parameters detailed:</p>
+
+<p>1. <code>fonts</code> is either an array or a single one. Every passed font is either specified as a string or as an object with optional style attributes. Some examples:</p>
+
+<ul>
+<li><code>&quot;Liza&quot;</code></li>
+<li><code>[&quot;Liza&quot;, &quot;Sauna&quot;]</code></li>
+<li><code>{family:&quot;Sauna&quot;, style:&quot;font-weight: bold&quot;}</code></li>
+<li><code>[&quot;Sauna&quot;, {family:&quot;Sauna&quot;, style:&quot;font-style:italic&quot;}, {family:&quot;Sauna&quot;, style:&quot;font-weight:bold&quot;}]</code></li>
+</ul>
+
+<p>2. <code>options</code> is an object with attributes that are all optional: </p>
+
+<ul>
+<li><code>loadingClass</code> is applied during loading (before success / fallback / swap).</li>
+<li><code>fallbackClass</code> is applied only if the <code>fallback</code> timeout value is reached before all fonts were loaded.</li>
+<li><code>fallback</code> defines the time before the <code>fallbackClass</code> is applied (default is <code>2000</code>).</li>
+<li><code>swap</code> is final timeout after the font loading is given up (default is <code>9999</code>); it must be equal to <code>timeout</code> or higher.</li>
+<li><code>onSuccess</code> is a callback function that is executed once all specified <code>fonts</code> were successfully loaded.</li>
+<li><code>onSwap</code> is a callback function that is executed if at least one of the <code>fonts</code> could not be loaded.</li>
+</ul>
+
+<p>Here is a complex example:</p>
+
+<pre><code class="js">var saunaFonts = [&quot;Sauna&quot;, {family:&quot;Sauna&quot;, style:&quot;font-style:italic&quot;}, {family:&quot;Sauna&quot;, style:&quot;font-weight:bold&quot;}]
+var options = { 
+    loadingClass: &quot;loading-ie&quot;,
+    fallbackClass: &quot;fallback-headers fallback-bodytext&quot;, 
+    fallback: 2500, swap: 2500,
+    onSuccess: setSaunaCookies, 
+    onSwap: function () { zenfonts(saunaFonts) } 
+}
+zenfonts(saunaFonts, options)
+</code></pre>
+
+<p>Note that both <code>loadingClass</code> and <code>fallbackClass</code> can be a list of classes, separated by spaces, e.g., <code>&quot;loading-headers loading-bodytext&quot;</code>. With the help of these two parameters you can design in detail how to handle the loading phase and how to fall back to other fonts if the specified fonts could not be loaded in time. </p>
+
+<p>Here are the four basic events, and what the actions Zenfonts performes at each:</p>
+
+<h3 id="start:youcallzenfonts">START: You call zenfonts()</h3>
+
+<ol>
+<li><code>loadingClass</code> is applied on the root <code>&lt;html&gt;</code> tag (if you provided it).</li>
+<li>A hidden DIV is created for each font you specified, forcing the browser to load those fonts within.</li>
+</ol>
+
+<h3 id="success:thespecifiedfontsareallloaded">SUCCESS: The specified fonts are all loaded</h3>
+
+<ol>
+<li><code>loadingClass</code> is removed (if you provided it).</li>
+<li><code>fallbackClass</code> is removed (if it was applied earlier).</li>
+<li><code>onSuccess</code> it is executed (if you provided it).</li>
+</ol>
+
+<h3 id="fallback:fontsnotloadeduntiltimeout2secondsbydefault">FALLBACK: fonts not loaded until timeout (2 seconds by default)</h3>
+
+<ol>
+<li><code>fallbackClass</code> is applied on the root <code>&lt;html&gt;</code> tag (if you provided it).</li>
+<li><code>loadingClass</code> is removed (if you provided it).</li>
+</ol>
+
+<h3 id="swap:zenfontsgivesup10secondsbydefault">SWAP: Zenfonts gives up (10 seconds by default)</h3>
+
+<ol>
+<li><code>onSwap</code> is executed (if you provided it).</li>
+<li><code>loadingClass</code> is removed (if you provided it).</li>
+<li><code>fallbackClass</code> is not removed.</li>
+<li>Zenfonts stops the monitoring &amp; quits.</li>
+</ol>
+
+<h2 id="examples">Examples</h2>
+
+<p>Here are a few generic ways of using Zenfonts. You can combine and extend these techniques for your specific needs.</p>
+
+<p><em>Tip:</em> Don’t forget to also look at the source of the demo page.</p>
+
+<h3 id="1.groupfonts">1. Group fonts</h3>
+
+<p>To minimize reflows (invisible state and/or swap) group fonts that go together, like headlines and body, or the various fonts from the single typeface:</p>
+
+<pre><code class="js">zenfonts(
+    [&quot;Typeface1&quot;, {family: &quot;Typeface1&quot;, style: &quot;font-style: italic&quot;}, {family: &quot;Typeface1&quot;, style: &quot;font-weight: bold&quot;}],
+    { fallbackClass: &quot;fallback-all&quot; }
+)
+</code></pre>
+
+<h3 id="2.quickfallbackforcriticalcontent">2. Quick fallback for critical content</h3>
+
+<p>Pay special attention to the fonts used for the most prominent content, like headlines and body text, because reflows can ruin the first experience of your site, and users want to read the content as early as possible. Group these fonts together, and set up an early swap. For example: </p>
+
+<pre><code class="js">zenfonts([&quot;TitleFont&quot;, &quot;BodyFont&quot;], {fallbackClass: &quot;fallback&quot;, fallback: 1000, swap: 1000})
+</code></pre>
+
+<h3 id="3.fallbackfirstforcriticalcontent">3. Fallback first for critical content</h3>
+
+<p>If content is even more critical then you start with a local font. At the same time preload the web font in the background and remember in a cookie when it’s done. When the user navigates to the next page the font is already cached (you can assume this from the existing cookie) so you can switch to your beautiful content font. Even if the cookie lies Zenfonts still controls the loading and will switch quickly to the fallback font. </p>
+
+<p>Here’s a complete example:</p>
+
+<pre><code class="js">var isLizaProbablyCached = document.cookie.indexOf(&quot;liza=cached&quot;) &gt; -1
+if (isLizaProbablyCached) {
+    zenfonts(&quot;Liza&quot;, { fallbackClass: &quot;fallback-liza&quot;, fallback: 1000, swap: 1000 })
+} else {
+    document.documentElement.className += &quot; fallback-liza&quot;
+    zenfonts(&quot;Liza&quot;, { 
+        onSuccess: function () {
+            document.cookie=&quot;liza=cached; expires=Wed, 1 Jan 2020 00:00:00 UTC; path=/&quot;
+        }
+    })
+}
+</code></pre>
+
+<h3 id="4.preloadthefontsyou’llneedlater">4. Preload the fonts you’ll need later</h3>
+
+<p>If you know that a specific font will be needed later (e.g., in a dialog box or on a next page) you can use Zenfonts to preload it. There is no harm done even if the font is already in the browser cache because then Zenfonts simply quits. Make sure you don’t specify a <code>fallbackClass</code> when doing preloads.</p>
+
+<p>A few examples:</p>
+
+<pre><code class="js">Zenfonts(&quot;Liza&quot;)
+</code></pre>
+
+<pre><code class="js">Zenfonts([&quot;Dolly&quot;, &quot;Fakir&quot;, &quot;Bello&quot;])
+</code></pre>
+
+<pre><code class="js">Zenfonts([
+    &quot;Sauna&quot;,
+    {family:&quot;Sauna&quot;, style:&quot;font-weight: 300&quot;},
+    {family:&quot;Sauna&quot;, style:&quot;font-weight: 700; font-style: italic&quot;}
+], { 
+    onSuccess: function () {
+        document.cookie = &quot;sauna=cached; expires=Wed, 1 Jan 2020 00:00:00 UTC&quot;
+    }
+})
+</code></pre>
+
+<h3 id="5.fontsnotloadedintimefallbackkeeploading.">5. Fonts not loaded in time? Fall back &amp; keep loading.</h3>
+
+<p>You can keep loading the fonts after a swap so that they get cached by the browser, and will be available at the next page load. Just call Zenfonts in <code>onSwap</code>: </p>
+
+<pre><code class="js">var myFonts = [&quot;TitleFont&quot;, &quot;BodyFont&quot;, {family: &quot;BodyFont&quot;, style: &quot;font-style: italic&quot;}]
+zenfonts(myFonts, {
+    fallbackClass: &quot;fallback&quot;, fallback: 1000, swap: 1000, 
+    onSwap: function () { zenfonts(myFonts) } 
+})
+</code></pre>
+
+<h2 id="license">License</h2>
+
+<p><a href="http://unlicense.org">Public Domain</a>. You can do with it whatever you want and I am not responsible for anything.</p>
+
+
+
+	<div class="about-me">
+		
+		<h2>About Me</h2>
+		
+		<p>
+			<a href="http://www.gaborlenard.com/"><img class="avatar" src="zengabor.jpg" alt="Gabor Lenard">My name is Gabor Lenard.</a> 
+			You can find me on Twitter as <a href="https://twitter.com/zengabor">@zengabor</a>.
+			I am a product designer &amp; developer, currently building <a href="http://zenvite.com/">zenvite.com</a>. It never ceases to amaze me how people share their knowledge and what they make. Their work empowers us all. This here, however humble, is my way of contributing to this community &amp; the wonderful <a href="https://adactio.com/journal/6692">continuum</a> we call the world&nbsp;wide&nbsp;web.
+		</p>
+
+	</div>
+		
+		<p>Other projects by me:</p>
+
+		<ul>
+<li><a href="https://github.com/zengabor/zenscroll">Zenscroll</a>, a JavasScript module to smooth-scroll web pages and DIVs.</li>
+<li><a href="https://github.com/zengabor/zentaps">Zentaps</a>, a JavaScript module to eliminate the 300ms tap delay in mobile browsers.</li>
+<li><a href="http://zenvite.com/">Zenvite.com</a>: Create beautiful invitation pages &amp; get everybody on the same page.</li>
+</ul>
+		
+	</main>
+	
+	<footer>
+		<div style="float:right"><a href="#">Scroll Back to Top &uarr;</a></div>
+		<small>
+			&copy; 2015 Gabor Lenard
+		</small>
+	</footer>
+	
+	<script src="zenscroll-min.js"></script>	
+	<script src="zentaps-min.js"></script>
+</body>
+</html>
