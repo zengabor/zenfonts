@@ -35,6 +35,7 @@ nav a {
   margin-top: 0.5em;
   padding: 0.25em 0.5em;
   border-bottom: 0.2em solid transparent;
+  font-weight: bold;
   -webkit-transition: border-color 0.5s ease-out;
           transition: border-color 0.5s ease-out; }
   nav a:hover, nav a:active {
@@ -93,6 +94,7 @@ h2 {
   color: #504231; }
 
 h3 {
+  font-style: italic;
   margin-top: 1.5em;
   margin-bottom: 0.5em; }
 
@@ -141,7 +143,7 @@ pre {
   margin-right: 0.75em;
   border-radius: 58% 42% / 62% 42%; }
 
-.scroll-top {
+.back-to-top {
   float: right;
   margin-left: 1em; }
 
@@ -161,6 +163,8 @@ pre {
   letter-spacing: 0.1em;
   cursor: pointer;
   outline: none;
+  font-family: inherit;
+  font-weight: bold;
   -webkit-transition: all 0.5s ease-out;
           transition: all 0.5s ease-out; }
   .play-button:hover, .play-button:active {

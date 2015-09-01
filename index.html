@@ -36,27 +36,15 @@
 
 
 	<style>
-		/* HIDES CONTENT DURING LOAD TO FIX FOUT ON IE: */
-		.loading body {
-			visibility: hidden;
-		}
+
+		/* HIDES CONTENT DURING LOAD TO FIX FOUT IN IE & EDGE: */
+		.loading body { visibility: hidden }
 
 
 		/* FONT AND FALLBACK FOR BODY TEXT: */
-		body, .play-button {
-			font-family: "Alegreya Sans", sans-serif;
-		}
-		nav a, h2, h3, strong, .play-button {
-			font-weight: 700;
-		}
-		h3 {
-			font-style: italic;
-		}
+		body { font-family: "Alegreya Sans", sans-serif }
 		.fallback body {
-			font-family: "Avenir Next", Avenir, "Segoe UI", Calibri, "Helvetica Neue", Helvetica, sans-serif;
-		}
-		.fallback h2, .fallback strong {
-			font-weight: bold;
+			font-family: "Avenir Next", Avenir, "Segoe UI", Calibri, "Helvetica Neue", Helvetica, sans-serif
 		}
 
 
@@ -72,12 +60,8 @@
 
 
 		/* FONT AND FALLBACK FOR THE CODE SNIPPETS: */
-		code {
-			font-family: "PT Mono", monospace;
-		}
-		.fallback-mono code {
-			font-family: monospace;
-		}
+		code { font-family: "PT Mono", monospace }
+		.fallback-mono code { font-family: monospace }
 z{}</style>
 
 
@@ -93,9 +77,9 @@ z{}</style>
 
 		zenfonts([
 			"Alegreya Sans", 
-			{family: "Alegreya Sans", style: "font-weight: 400; font-style: italic"},
-			{family: "Alegreya Sans", style: "font-weight: 700"},
-			{family: "Alegreya Sans", style: "font-weight: 700; font-style: italic"}
+			{family: "Alegreya Sans", style: "font-style: italic"},
+			{family: "Alegreya Sans", style: "font-weight: bold"},
+			{family: "Alegreya Sans", style: "font-weight: bold; font-style: italic"}
 		], { 
 			loadingClass: "loading", 
 			fallbackClass: "fallback", 
@@ -118,8 +102,8 @@ z{}</style>
 
 
 		// 3. FONT FOR CODE SNIPPETS
-		// It falls back to a local font after 1 second, 
-		// but still tries to load the web font within 10 seconds as reflow is not a big issue.
+		// It falls back to a local font after 1 second, but still tries to load the web font
+		// within 10 seconds as reflow is not a big issue with fixed line breaks.
 
 		zenfonts("PT Mono", { fallbackClass: "fallback-mono", fallback: 1000 } )
 
@@ -345,7 +329,7 @@ if (isLizaProbablyCached) {
 <pre><code class="js">zenfonts([
     &quot;Sauna&quot;,
     {family:&quot;Sauna&quot;, style:&quot;font-weight: 300&quot;},
-    {family:&quot;Sauna&quot;, style:&quot;font-weight: 700; font-style: italic&quot;}
+    {family:&quot;Sauna&quot;, style:&quot;font-weight: bold; font-style: italic&quot;}
 ], { 
     onSuccess: function () {
         document.cookie = &quot;sauna=cached; expires=Wed, 1 Jan 2020 00:00:00 UTC&quot;
@@ -363,6 +347,31 @@ zenfonts(myFonts, {
     onSwap: function () { zenfonts(myFonts) } 
 })
 </code></pre>
+
+
+<h3 id="6.checkoutthesourcecodeofthispage">6. Check out the source code of this page</h3>
+
+<p>In the head you can see the CSS files for Google fonts which define the @font-face entries.</p>
+
+<p>Then the CSS rules related to the web fonts are inlined in a <code>&lt;style&gt;</code> block. After the normal definition of the font-family there is always a fallback with the right prefix: <code>.fallback</code>, <code>.fallback-logotype</code>, and <code>.fallback-mono</code>. (Which could be done more elegantly with a CSS preprocessor, like Sass.)</p>
+
+<p>Right after comes the minimized version of Zenfonts inlined, and then three calls of zenfonts():</p>
+
+<ol>
+<li>For the body text with a low fallback &amp; equal swap timeout, so content won&#8217;t get blocked long. There is also a loading class to avoid FOUT on IE &amp; Edge.</li>
+<li>I give a lot more time for the logotype as it doesn&#8217;t cause reflows, and I keep loading it for another 30 seconds in case of a swap.</li>
+<li>Finally, the font for the code examples fall back after 1 second but then they keep loading until the default 10 seconds timeout and they appear as soon as they become available (the code uses preformatted line breakes so there can&#8217;t be significant reflows).</li>
+</ol>
+
+<p>This is an example of finding the best strategy for each type of content/font combinations.</p>
+
+<p>To experience how this page loads on a slow network:</p>
+
+<ol>
+<li>Disable the browser&#8217;s cache or clear it. (Otherwise fonts may be loaded from there.)</li>
+<li>Load the page on a slow or emulated network. (E.g., turn on network throttling in Chrome DevTools, or use a slow mobile network.)</li>
+</ol>
+
 
 <h2 id="license">License</h2>
 
@@ -393,7 +402,7 @@ zenfonts(myFonts, {
 	</main>
 	
 	<footer>
-		<div style="float:right"><a href="#">Scroll Back to Top &uarr;</a></div>
+		<div class="back-to-top"><a href="#">Scroll Back to Top &uarr;</a></div>
 		<small>
 			&copy; 2015 Gabor Lenard
 		</small>
