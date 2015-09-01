@@ -6,7 +6,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Zenfonts - Webfonts</title>
+	<title>Zenfonts - A module to observe and control the loading of web fonts</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="twitter:site" content="@zengabor">
 	<meta name="twitter:creator" content="@zengabor">
@@ -126,9 +126,6 @@ z{}</style>
 </script>
 
 
-	<script>zenfonts("Nincs ilyen")</script>
-
-
 	<script async src="https://www.google-analytics.com/analytics.js"></script>
 	<script>
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)}
@@ -161,7 +158,7 @@ z{}</style>
 
 			<h1 id="webfontsarebeautiful.oncenbsptheynbsparenbsploaded.">Web Fonts Are Beautiful. Once&nbsp;They&nbsp;Are&nbsp;Loaded.</h1>
 
-<p>Isn’t it frustrating when text is already there, yet you cannot read it because the fonts are not loaded yet? And when Internet Explorer flickers the text? How&nbsp;unprofessional!</p>
+<p>Isn’t it frustrating when text is already there, yet you cannot read it because the fonts are not loaded yet? And that ugly flickering in IE &amp; Edge? They just have no&nbsp;taste!</p>
 
 <p>Take control over font loading. Just the way you want. Zenfonts&nbsp;can&nbsp;help.</p>
 
@@ -181,7 +178,7 @@ z{}</style>
 
 <ul>
 <li>It can solve the “long invisible text” issue (iPhone and old WebKit-based Android browsers on slow network) by applying a fallback class during font loading.</li>
-<li>It can also solve the Flash Of Unformatted Text, aka <a href="http://www.paulirish.com/2009/fighting-the-font-face-fout/">FOUT</a> which still happens in Internet Explorer.</li>
+<li>It can also solve the Flash Of Unformatted Text, aka <a href="http://www.paulirish.com/2009/fighting-the-font-face-fout/">FOUT</a> which still happens in Internet Explorer and Edge.</li>
 <li>It can preload fonts before they are used (e.g., in a dialog box or on a next page).</li>
 <li>Supports practically all browsers. Tested and works under Android 2.2+ browser, Chrome 14+, Edge, Firefox 3.6+, IE6+, Opera 10.6+, Safari 4.1+ for iOS &amp; OS X.</li>
 <li>It’s tiny (759 bytes minimized &amp; gzipped), ready to be inlined in your page.</li>
@@ -238,7 +235,7 @@ z{}</style>
 <li><code>loadingClass</code> is applied during loading (before success / fallback / swap).</li>
 <li><code>fallbackClass</code> is applied only if the <code>fallback</code> timeout value is reached before all fonts were loaded.</li>
 <li><code>fallback</code> defines the time before the <code>fallbackClass</code> is applied (default is <code>2000</code>).</li>
-<li><code>swap</code> is final timeout after the font loading is given up (default is <code>9999</code>); it must be equal to <code>timeout</code> or higher.</li>
+<li><code>swap</code> is final timeout after the font loading is given up (default is <code>9999</code>); it must be equal to <code>fallback</code> or higher.</li>
 <li><code>onSuccess</code> is a callback function that is executed once all specified <code>fonts</code> were successfully loaded.</li>
 <li><code>onSwap</code> is a callback function that is executed if at least one of the <code>fonts</code> could not be loaded.</li>
 </ul>
@@ -339,13 +336,13 @@ if (isLizaProbablyCached) {
 
 <p>A few examples:</p>
 
-<pre><code class="js">Zenfonts(&quot;Liza&quot;)
+<pre><code class="js">zenfonts(&quot;Liza&quot;)
 </code></pre>
 
-<pre><code class="js">Zenfonts([&quot;Dolly&quot;, &quot;Fakir&quot;, &quot;Bello&quot;])
+<pre><code class="js">zenfonts([&quot;Dolly&quot;, &quot;Fakir&quot;, &quot;Bello&quot;])
 </code></pre>
 
-<pre><code class="js">Zenfonts([
+<pre><code class="js">zenfonts([
     &quot;Sauna&quot;,
     {family:&quot;Sauna&quot;, style:&quot;font-weight: 300&quot;},
     {family:&quot;Sauna&quot;, style:&quot;font-weight: 700; font-style: italic&quot;}
