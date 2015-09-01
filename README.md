@@ -12,7 +12,7 @@
 
 
 
-Isn’t it frustrating when text is already there, yet you cannot read it because the fonts are not loaded yet? And when Internet Explorer flickers the text? How&nbsp;unprofessional!
+Isn’t it frustrating when text is already there, yet you cannot read it because the fonts are not loaded yet? And that ugly flickering in IE & Edge? They just have no&nbsp;taste!
 
 Take control over font loading. Just the way you want. Zenfonts&nbsp;can&nbsp;help.
 
@@ -25,7 +25,7 @@ Zenfonts is a tiny JavaScript helper to (pre)load web fonts. It’s not replacin
 If you are really serious about performance & a smooth experience consider not using web fonts at all. Most platforms have a handful of beautiful fonts already installed which don’t have any of the drawbacks of web fonts. However, if you decide to use web fonts then Zenfonts can be a big help for you:
 
 - It can solve the “long invisible text” issue (iPhone and old WebKit-based Android browsers on slow network) by applying a fallback class during font loading.
-- It can also solve the Flash Of Unformatted Text, aka [FOUT](http://www.paulirish.com/2009/fighting-the-font-face-fout/) which still happens in Internet Explorer.
+- It can also solve the Flash Of Unformatted Text, aka [FOUT](http://www.paulirish.com/2009/fighting-the-font-face-fout/) which still happens in Internet Explorer and Edge.
 - It can preload fonts before they are used (e.g., in a dialog box or on a next page).
 - Supports practically all browsers. Tested and works under Android 2.2+ browser, Chrome 14+, Edge, Firefox 3.6+, IE6+, Opera 10.6+, Safari 4.1+ for iOS & OS X.
 - It’s tiny (759 bytes minimized & gzipped), ready to be inlined in your page.
@@ -179,18 +179,18 @@ If you know that a specific font will be needed later (e.g., in a dialog box or 
 A few examples:
 
 ```js
-Zenfonts("Liza")
+zenfonts("Liza")
 ```
 
 ```js
-Zenfonts(["Dolly", "Fakir", "Bello"])
+zenfonts(["Dolly", "Fakir", "Bello"])
 ```
 
 ```js
-Zenfonts([
+zenfonts([
     "Sauna",
 	{family:"Sauna", style:"font-weight: 300"},
-	{family:"Sauna", style:"font-weight: 700; font-style: italic"}
+	{family:"Sauna", style:"font-weight: bold; font-style: italic"}
 ], { 
 	onSuccess: function () {
 		document.cookie = "sauna=cached; expires=Wed, 1 Jan 2020 00:00:00 UTC"
