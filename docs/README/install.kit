@@ -1,0 +1,23 @@
+## Install
+
+Since web fonts are already in the critical path, you don’t want zenfonts to be another blocking request. Instead, inline the minimized version into the page (you can automate this with [CodeKit](https://incident57.com/codekit/), [grunt](https://gruntjs.com/), etc.). The best place is before the `</head>` closing tag. Then call it as many times as required, with the desired fonts and parameters. For example:
+
+````html
+...
+    <script><!-- @include ../../../dist/zenfonts-min.js --></script>
+    <script>
+        zenfonts("Beautiful Font", {fallbackClass: "fallback-1", fallback: 1000, swap: 1000})
+        zenfonts(["Font2", "Font3"], {loadingClass: "load", fallbackClass: "fallback-2"})
+    </script>
+</head>
+````
+
+_Tip:_ You can actually copy and use the above code to install Zenfonts. The first `<script>` line contains the current version of Zenfonts. Just make sure you copy the entire line.
+
+You can also [download Zenfonts](https://github.com/zengabor/zenfonts/archive/latest.zip), or use npm:
+
+````
+npm install zenfonts
+````
+
+Of course, your web fonts must be already specified by `@font-face` or must be loaded in some other way (like by a JavaScript font loader). It doesn’t matter how; for Zenfonts it’s all transparent.
