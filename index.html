@@ -30,11 +30,6 @@
 	<![endif]-->
 
 
-	<link href="https://fonts.googleapis.com/css?family=Merienda+One" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css?family=Alegreya+Sans:400,400italic,700,700italic" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet" type="text/css">
-
-
 	<style>
 
 		/* HIDES CONTENT DURING LOAD TO FIX FOUT IN IE & EDGE: */
@@ -351,9 +346,9 @@ zenfonts(myFonts, {
 
 <h3 id="6.checkoutthesourcecodeofthispage">6. Check out the source code of this page</h3>
 
-<p>In the head you can see the CSS files for Google fonts which define the @font-face entries.</p>
+<p>The <code>@font-face</code> definitions are at the beginning of the references <code>styles.css</code> file.</p>
 
-<p>Then the CSS rules related to the web fonts are inlined in a <code>&lt;style&gt;</code> block. After the normal definition of the font-family there is always a fallback with the right prefix: <code>.fallback</code>, <code>.fallback-logotype</code>, and <code>.fallback-mono</code>. (Which could be done more elegantly with a CSS preprocessor, like Sass.)</p>
+<p>Then the CSS rules related to the web fonts are inlined in a <code>&lt;style&gt;</code> block for easier access. After the normal definition of the font-family there is always a fallback with the right prefix: <code>.fallback</code>, <code>.fallback-logotype</code>, and <code>.fallback-mono</code>. (Which could be done more elegantly with a CSS preprocessor, like Sass.)</p>
 
 <p>Right after comes the minimized version of Zenfonts inlined, and then three calls of zenfonts():</p>
 
